@@ -29,7 +29,7 @@ export default async function handler(request, response) {
     }
 
     // Parse the JSON string back into an object before sending
-    const reportData = JSON.parse(reportDataString);
+    const reportData = reportDataString;
 
     return response.status(200).json(reportData); // Send the actual report data
   } catch (error) {
