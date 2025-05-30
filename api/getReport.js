@@ -1,27 +1,40 @@
+// api/getReport.js
 import { Redis } from "@upstash/redis";
 
 // Initialize Redis from environment variables
 const redis = Redis.fromEnv();
 
 export default async function handler(request, response) {
+  // getReport should handle GET requests
+  if (request.method !== "GET") {
+    return response.status(405).json({ message: "Method Not Allowed" });
+  }
+
   try {
-    const reportId = request.query.id;
+    // Get the reportId from the URL query parameters (e.g., /api/getReport?id=xyz123)
+    const { id } = request.query;
 
-    // Data is retrieved as a string
-    const reportDataString = await redis.get(reportId);
+    if (!id) {
+      return response.status(400).json({ message: "Report ID is required" });
+    }
 
-    if (!reportDataString) {
+    // Fetch the data (which is a JSON string) from Redis using the ID
+    const reportDataString = await redis.get(id);
+
+    if (reportDataString === null) {
+      // Check for null, as 'get' returns null if key doesn't exist
       return response
         .status(404)
         .json({ message: "Report not found or has expired." });
     }
 
-    // Parse the JSON string back into an object
+    // Parse the JSON string back into an object before sending
     const reportData = JSON.parse(reportDataString);
 
-    return response.status(200).json(reportData);
+    return response.status(200).json(reportData); // Send the actual report data
   } catch (error) {
     console.error("Error in /api/getReport:", error);
+    // Differentiate error message from submit
     return response.status(500).json({ message: "Error fetching report" });
   }
 }
