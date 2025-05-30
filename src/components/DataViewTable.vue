@@ -52,7 +52,7 @@ async function fetchReportData() {
     // 2. Fetch data from your Vercel API endpoint
     // Replace 'YOUR_VERCEL_PROJECT_URL.vercel.app' with your actual Vercel project URL
     const response = await fetch(
-      `https://vortex-dataview-git-dev-jerry-lashleys-projects.vercel.app/api/getReport?id=${reportId}`,
+      `https://vortex-dataview.vercel.app/api/getReport?id=${reportId}`,
     );
 
     if (!response.ok) {
