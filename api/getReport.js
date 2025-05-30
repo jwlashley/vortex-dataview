@@ -8,44 +8,53 @@ export default async function handler(request, response) {
   }
 
   const { id } = request.query;
-  console.log(`[api/getReport] Received request for ID: ${id}`); // Log 1
+  // You can keep this log if you like
+  console.log(`[api/getReport] Received request for ID: ${id}`);
 
   if (!id) {
-    console.log("[api/getReport] Report ID is missing from query"); // Log 2
+    console.log("[api/getReport] Report ID is missing from query");
     return response.status(400).json({ message: "Report ID is required" });
   }
 
   try {
+    // You can keep this log
     console.log(
       `[api/getReport] Attempting to fetch data from Redis for ID: ${id}`,
-    ); // Log 3
-    const reportDataString = await redis.get(id);
+    );
+    const reportDataObject = await redis.get(id); // Renamed to reflect it's an object
 
-    // CRUCIAL LOGS: See what Redis actually returns
+    // You can keep these logs for verification if you want, or remove them later
     console.log(
-      `[api/getReport] Data fetched from Redis for ID ${id}. Type: ${typeof reportDataString}`,
-    ); // Log 4
-    console.log(`[api/getReport] Raw data from Redis:`, reportDataString); // Log 5
+      `[api/getReport] Data fetched from Redis for ID ${id}. Type: ${typeof reportDataObject}`,
+    );
+    console.log(
+      `[api/getReport] Raw data object from Redis:`,
+      reportDataObject,
+    );
 
-    if (reportDataString === null) {
-      console.log(`[api/getReport] Report not found in Redis for ID: ${id}`); // Log 6
+    if (reportDataObject === null) {
+      // redis.get() returns null if key doesn't exist
+      console.log(`[api/getReport] Report not found in Redis for ID: ${id}`);
       return response
         .status(404)
         .json({ message: "Report not found or has expired." });
     }
 
-    console.log(`[api/getReport] Attempting to JSON.parse data for ID: ${id}`); // Log 7
-    const reportData = JSON.parse(reportDataString); // This is where the SyntaxError happened
-    console.log(`[api/getReport] Successfully parsed JSON for ID: ${id}`); // Log 8
+    // ---- THE FIX: REMOVE JSON.parse() ----
+    // console.log(`[api/getReport] Attempting to JSON.parse data for ID: ${id}`);
+    // const reportData = JSON.parse(reportDataObject); // NO LONGER NEEDED!
+    // console.log(`[api/getReport] Successfully parsed JSON for ID: ${id}`);
 
-    return response.status(200).json(reportData);
+    // Directly use the object returned by redis.get()
+    return response.status(200).json(reportDataObject);
   } catch (error) {
-    // CRUCIAL LOG for errors
+    // This catch block might now only catch very unexpected errors,
+    // as the main SyntaxError should be gone.
     console.error(
       `[api/getReport] Error processing ID ${id}:`,
       error.message,
       error.stack,
-    ); // Log 9
+    );
     return response
       .status(500)
       .json({ message: "Error fetching report", errorDetails: error.message });
