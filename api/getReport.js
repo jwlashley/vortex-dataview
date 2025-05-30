@@ -30,6 +30,7 @@ export default async function handler(request, response) {
 
     // Parse the JSON string back into an object before sending
     const reportData = reportDataString;
+    console.log(typeof reportData);
 
     return response.status(200).json(reportData); // Send the actual report data
   } catch (error) {
