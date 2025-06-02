@@ -15,7 +15,7 @@ export default async function handler(request, response) {
     const reportId = nanoid();
 
     await redis.set(reportId, JSON.stringify(reportData), {
-      ex: 86400, // Expires in 86400 seconds (24 hours)
+      ex: 10800, // Expires in 86400 seconds (24 hours)
     });
 
     return response.status(200).json({ id: reportId });
