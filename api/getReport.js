@@ -40,16 +40,8 @@ export default async function handler(request, response) {
         .json({ message: "Report not found or has expired." });
     }
 
-    // ---- THE FIX: REMOVE JSON.parse() ----
-    // console.log(`[api/getReport] Attempting to JSON.parse data for ID: ${id}`);
-    // const reportData = JSON.parse(reportDataObject); // NO LONGER NEEDED!
-    // console.log(`[api/getReport] Successfully parsed JSON for ID: ${id}`);
-
-    // Directly use the object returned by redis.get()
     return response.status(200).json(reportDataObject);
   } catch (error) {
-    // This catch block might now only catch very unexpected errors,
-    // as the main SyntaxError should be gone.
     console.error(
       `[api/getReport] Error processing ID ${id}:`,
       error.message,
