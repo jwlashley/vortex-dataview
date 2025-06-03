@@ -29,11 +29,11 @@
 import { onMounted, ref } from "vue";
 
 // Reactive variable to hold the items for the table
-const items = ref([]);
+const items = ref<ReportItem[]>([]);
 // Reactive variable for loading state
 const loading = ref(true);
 // Reactive variable for error messages
-const error = ref(null);
+const error = ref<string | null>(null);
 
 // Define headers for the v-data-table (Vuetify 3 syntax)
 // The 'key' should match the property names in your 'items' objects
@@ -41,7 +41,7 @@ const tableHeaders = [
   { title: "ModID", align: "start", sortable: true, key: "ModID" },
   { title: "Category", key: "Category" },
   { title: "Count", key: "Count" },
-];
+] as const;
 
 // Function to fetch data from Vercel API
 async function fetchReportData() {
@@ -115,7 +115,11 @@ async function fetchReportData() {
     items.value = transformedItems;
   } catch (e) {
     console.error("Failed to fetch or process report data:", e);
-    error.value = e.message || "An unknown error occurred.";
+    if (e instanceof Error) {
+      error.value = e.message;
+    } else {
+      error.value = "An unknown error occurred.";
+    }
   } finally {
     loading.value = false;
   }
