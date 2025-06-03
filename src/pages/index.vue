@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>Vortex Mod Usage Report</h1>
     <DataViewTable />
   </div>
 </template>
