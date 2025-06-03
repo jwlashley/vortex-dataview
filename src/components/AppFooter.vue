@@ -11,12 +11,7 @@
     >
       <v-icon :icon="item.icon" />
     </a>
-    <div
-      class="text-caption text-disabled"
-      style="position: absolute; left: 50%"
-    >
-      Vortex-Dataview
-    </div>
+    <div class="text-caption text-disabled">Vortex-Dataview</div>
     <div
       class="text-caption text-disabled"
       style="position: absolute; right: 16px"
