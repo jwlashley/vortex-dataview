@@ -128,7 +128,7 @@ function triggerDownload(content: string, fileName: string, mimeType: string) {
   a.href = URL.createObjectURL(blob);
   a.download = fileName;
   a.click();
-  URL.rebokeObjectURL(a.href);
+  URL.revokeObjectURL(a.href);
 }
 
 function exportAsJSON() {
