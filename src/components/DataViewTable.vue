@@ -28,6 +28,12 @@
 <script lang="ts" setup>
 import { onMounted, ref } from "vue";
 
+interface ReportItem {
+  ModID: string;
+  Category: string;
+  Count: number;
+}
+
 // Reactive variable to hold the items for the table
 const items = ref<ReportItem[]>([]);
 // Reactive variable for loading state
