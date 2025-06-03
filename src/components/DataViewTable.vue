@@ -48,6 +48,7 @@ async function fetchReportData() {
   loading.value = true;
   error.value = null;
 
+  // DEBUG DATA -- DISREGARD UNLESS TESTING
   //   items.value = [
   //     { ModID: "vortex", Category: "SomeCategory", Count: 10 },
   //     { ModID: "vortex", Category: "SomeCategory1", Count: 101 },
