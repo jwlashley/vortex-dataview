@@ -1,6 +1,6 @@
 // api/getReport.js
 import { Redis } from "@upstash/redis";
-const redis = Redis.fromEnv();
+const redis = Redis.fromEnv(); //Updated to read from envvariables on Vercel
 
 export default async function handler(request, response) {
   if (request.method !== "GET") {
